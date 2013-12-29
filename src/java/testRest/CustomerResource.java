@@ -6,10 +6,11 @@ package testRest;
 
 import com.corvo.customerRestSupport.Address;
 import com.corvo.customerRestSupport.Customer;
-import javax.ejb.EJB;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceUnit;
+import javax.transaction.UserTransaction;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
@@ -22,7 +23,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import sessonBeanForEntities.CustomerDataFacade;
 import testEntities.CustomerData;
-import testEntities.exceptions.NonexistentEntityException;
+import testEntities.CustomerDataJpaController;
 
 /**
  * REST Web Service
@@ -36,12 +37,17 @@ public class CustomerResource {
     @Context
     private UriInfo context;
     
+    //To use the Netbeans wizard created JPA controllers, each jpa controller requires as input to the constructor
+    //an Entity Manager Factory object and a User Tranaction object. These can be created via dependency injection as done
+    //below 
+    
+  @PersistenceUnit(unitName="WebApplication1PU") //om your application server 
+    EntityManagerFactory emf; 
   
+    @Resource //inject from your application server 
+    UserTransaction utx;
     
-    @EJB   //Use Dependency Injection to inject CustomerDataFacade Stateless EJB
-    CustomerDataFacade customerFacade;
-    
-    //private CustomerDataFacade customerFacade;
+  
     
     /**
      * Creates a new instance of CustomerResource
@@ -106,29 +112,18 @@ public class CustomerResource {
     @Path("/CustomerData/{inputString}")
     public CustomerData getCustomerData( @PathParam("inputString") int customerDataId)
     {
+        CustomerData customerData = null;
        
-        CustomerData customerData;
-                
-       // customerFacade = new CustomerDataFacade();
-        if (customerFacade == null)
-            System.out.println("customerFacade is null");
-        try
-        {
-        customerData = customerFacade.find(customerDataId);       
-        
-        System.out.println("Cutomer name for id: "+ customerDataId + " is: " + customerData.getName());
+        CustomerDataJpaController customerJpaController = new CustomerDataJpaController(utx, emf); //create an instance of your jpa controller and pass in the injected emf and utx 
+        try { 
+             customerData = customerJpaController.findCustomerData(customerDataId);
+        } catch (Exception ex) { 
+            System.out.println("Exception Using JPA Controller: " + ex.getMessage() );
+            
+        } 
         
         return customerData;
         
-        }
-        catch( Exception ex)
-        {
-            System.out.println("Corvo: Cauught Exception: Requested Record Not Found");
-            
-            CustomerData customerData1 = null;
-            
-            return customerData1;
-        }
         
 
     }    
@@ -163,9 +158,9 @@ public class CustomerResource {
     {
        
           
-        
-        CustomerData customerData;
-                
+     
+        CustomerData customerData = null;
+        /*        
        // customerFacade = new CustomerDataFacade();
         if (customerFacade == null)
             System.out.println("customerFacade is null");
@@ -175,8 +170,10 @@ public class CustomerResource {
         System.out.println("Cutomer name for id: "+ customerDataId + " is: " + customerData.getName());
         return customerData;   
         
+     */   
         
         
+        return customerData;
     }    
     
 }
