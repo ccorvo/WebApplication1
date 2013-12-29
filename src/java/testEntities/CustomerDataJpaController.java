@@ -253,8 +253,11 @@ public class CustomerDataJpaController implements Serializable {
                 q.setMaxResults(maxResults);
                 q.setFirstResult(firstResult);
             }
+            System.out.println("Corvo: Right Before getResultList call");
             return q.getResultList();
         } finally {
+            System.out.println("Corvo: In Finally Block of findCustomerDataEntities");
+          
             em.close();
         }
     }

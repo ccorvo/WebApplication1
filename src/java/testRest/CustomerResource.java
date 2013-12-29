@@ -6,6 +6,7 @@ package testRest;
 
 import com.corvo.customerRestSupport.Address;
 import com.corvo.customerRestSupport.Customer;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
@@ -41,7 +42,7 @@ public class CustomerResource {
     //an Entity Manager Factory object and a User Tranaction object. These can be created via dependency injection as done
     //below 
     
-  @PersistenceUnit(unitName="WebApplication1PU") //om your application server 
+  @PersistenceUnit(unitName="WebApplication1PU") //inject from your application server 
     EntityManagerFactory emf; 
   
     @Resource //inject from your application server 
@@ -117,6 +118,8 @@ public class CustomerResource {
         CustomerDataJpaController customerJpaController = new CustomerDataJpaController(utx, emf); //create an instance of your jpa controller and pass in the injected emf and utx 
         try { 
              customerData = customerJpaController.findCustomerData(customerDataId);
+             System.out.println("Corvo: Before return from getCustomerData");
+                     
         } catch (Exception ex) { 
             System.out.println("Exception Using JPA Controller: " + ex.getMessage() );
             
@@ -127,6 +130,33 @@ public class CustomerResource {
         
 
     }    
+    
+    
+   // If the GET request requires an application XML response, the following method will be called.
+    @GET
+    @Produces (MediaType.APPLICATION_XML)
+    @Path("/AllCustomerData")
+    public List <CustomerData> getAllCustomers()
+    {
+        
+        System.out.println("Corvo: got to getAllCustomers");
+        List <CustomerData> customerData = null;
+       
+        CustomerDataJpaController customerJpaController = new CustomerDataJpaController(utx, emf); //create an instance of your jpa controller and pass in the injected emf and utx 
+        try { 
+             customerData = customerJpaController.findCustomerDataEntities();
+        } catch (Exception ex) { 
+            System.out.println("Exception Using JPA Controller: " + ex.getMessage() );
+            
+        } 
+        
+        return customerData;
+        
+        
+
+    }    
+    
+    
     
     
     //If the GET Request requires an application-JSON response, the following method will be called.
