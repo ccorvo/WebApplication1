@@ -9,7 +9,7 @@ import testEntities.Manufacturer;
 import testEntities.ProductCode;
 import testEntities.PurchaseOrder;
 
-@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2013-12-28T20:24:07")
+@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2013-12-31T08:15:38")
 @StaticMetamodel(Product.class)
 public class Product_ { 
 
