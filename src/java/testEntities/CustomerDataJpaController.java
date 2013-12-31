@@ -41,31 +41,38 @@ public class CustomerDataJpaController implements Serializable {
         if (customerData.getPurchaseOrderCollection() == null) {
             customerData.setPurchaseOrderCollection(new ArrayList<PurchaseOrder>());
         }
+        
+        System.out.println("Corvo: Before try catch block in create Function");
         EntityManager em = null;
         try {
-            utx.begin();
+           // utx.begin();
             em = getEntityManager();
             MicroMarket zip = customerData.getZip();
             if (zip != null) {
                 zip = em.getReference(zip.getClass(), zip.getZipCode());
                 customerData.setZip(zip);
             }
+            System.out.println("Corvo: After MiroMarket");
             DiscountCode discountCode = customerData.getDiscountCode();
             if (discountCode != null) {
                 discountCode = em.getReference(discountCode.getClass(), discountCode.getDiscountCode());
                 customerData.setDiscountCode(discountCode);
             }
+            System.out.println("Corvo: After DiscountCode");
             Collection<PurchaseOrder> attachedPurchaseOrderCollection = new ArrayList<PurchaseOrder>();
             for (PurchaseOrder purchaseOrderCollectionPurchaseOrderToAttach : customerData.getPurchaseOrderCollection()) {
                 purchaseOrderCollectionPurchaseOrderToAttach = em.getReference(purchaseOrderCollectionPurchaseOrderToAttach.getClass(), purchaseOrderCollectionPurchaseOrderToAttach.getOrderNum());
                 attachedPurchaseOrderCollection.add(purchaseOrderCollectionPurchaseOrderToAttach);
             }
+            
+            System.out.println("Corvo: After PurchaseOrder collection");
             customerData.setPurchaseOrderCollection(attachedPurchaseOrderCollection);
             em.persist(customerData);
             if (zip != null) {
                 zip.getCustomerDataCollection().add(customerData);
                 zip = em.merge(zip);
             }
+            System.out.println("Corvo: AFter persist customerData");
             if (discountCode != null) {
                 discountCode.getCustomerDataCollection().add(customerData);
                 discountCode = em.merge(discountCode);
@@ -79,10 +86,10 @@ public class CustomerDataJpaController implements Serializable {
                     oldCustomerIdOfPurchaseOrderCollectionPurchaseOrder = em.merge(oldCustomerIdOfPurchaseOrderCollectionPurchaseOrder);
                 }
             }
-            utx.commit();
+           // utx.commit();
         } catch (Exception ex) {
             try {
-                utx.rollback();
+               // utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }

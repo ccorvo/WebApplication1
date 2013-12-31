@@ -8,7 +8,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 import testEntities.CustomerData;
 import testEntities.Product;
 
-@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2013-12-29T14:12:04")
+@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2013-12-31T15:02:38")
 @StaticMetamodel(PurchaseOrder.class)
 public class PurchaseOrder_ { 
 

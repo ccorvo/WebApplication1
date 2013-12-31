@@ -6,25 +6,22 @@ package testRest;
 
 import com.corvo.customerRestSupport.Address;
 import com.corvo.customerRestSupport.Customer;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
+import javax.ws.rs.*;
 
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import sessonBeanForEntities.CustomerDataFacade;
 import testEntities.CustomerData;
 import testEntities.CustomerDataJpaController;
+import testEntities.DiscountCode;
+import testEntities.MicroMarket;
 
 /**
  * REST Web Service
@@ -206,4 +203,48 @@ public class CustomerResource {
         return customerData;
     }    
     
+  
+    @POST
+    @Consumes("application/x-www-form-urlencoded")
+    @Path("/createCustomer")
+    
+    public void createCustomer(@FormParam("name") String customerName, @FormParam("address1") String address_1,
+            @FormParam("address2") String address_2, @FormParam("city") String city, @FormParam("state") String state,
+            @FormParam("zip") String zip_code, @FormParam("discountCode") String discountCode, 
+            @FormParam("discountRate") BigDecimal rate) {
+        
+       
+        System.out.println("Corvo: createCustomer Called with name = " + customerName + " Address1: " + address_1); 
+        CustomerData customer = new CustomerData();
+        customer.setName(customerName);
+        customer.setAddressline1(address_1);
+        customer.setAddressline2(address_2);
+        customer.setCity(city);
+        customer.setState(state);
+        customer.setCustomerId(14654);
+        
+        DiscountCode discount = new DiscountCode();
+        Character discountCodeCharacter = discountCode.charAt(0);
+        
+        discount.setDiscountCode('Q');
+        discount.setRate(rate);
+        
+        customer.setDiscountCode(discount);
+        
+        MicroMarket zip = new MicroMarket();
+        zip.setZipCode(zip_code);
+        
+        customer.setZip(zip);  //Populate MicroMarket Object of customer
+
+        CustomerDataJpaController customerJpaController = new CustomerDataJpaController(utx, emf); //create an instance of your jpa controller and pass in the injected emf and utx 
+        try { 
+             customerJpaController.create(customer);
+      } catch (Exception ex) { 
+          System.out.println("Exception Using JPA Controller: " + ex.getMessage() );
+            
+        } 
+        
+      
+    }
+  
 }

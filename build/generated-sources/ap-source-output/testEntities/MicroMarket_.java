@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import testEntities.CustomerData;
 
-@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2013-12-29T14:12:04")
+@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2013-12-31T15:02:38")
 @StaticMetamodel(MicroMarket.class)
 public class MicroMarket_ { 
 
