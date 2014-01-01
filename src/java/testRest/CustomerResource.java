@@ -221,13 +221,13 @@ public class CustomerResource {
         customer.setAddressline2(address_2);
         customer.setCity(city);
         customer.setState(state);
-        customer.setCustomerId(14654);
+        customer.setCustomerId(146557);
         
         DiscountCode discount = new DiscountCode();
         Character discountCodeCharacter = discountCode.charAt(0);
         
-        discount.setDiscountCode('Q');
-        discount.setRate(rate);
+        discount.setDiscountCode('M');
+        //discount.setRate(rate);
         
         customer.setDiscountCode(discount);
         

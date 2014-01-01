@@ -45,7 +45,7 @@ public class CustomerDataJpaController implements Serializable {
         System.out.println("Corvo: Before try catch block in create Function");
         EntityManager em = null;
         try {
-           // utx.begin();
+            //utx.begin();
             em = getEntityManager();
             MicroMarket zip = customerData.getZip();
             if (zip != null) {
@@ -86,10 +86,10 @@ public class CustomerDataJpaController implements Serializable {
                     oldCustomerIdOfPurchaseOrderCollectionPurchaseOrder = em.merge(oldCustomerIdOfPurchaseOrderCollectionPurchaseOrder);
                 }
             }
-           // utx.commit();
+            ////utx.commit();
         } catch (Exception ex) {
             try {
-               // utx.rollback();
+                utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
