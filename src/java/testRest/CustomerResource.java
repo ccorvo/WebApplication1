@@ -247,4 +247,53 @@ public class CustomerResource {
       
     }
   
+    
+   @POST
+    @Consumes("application/x-www-form-urlencoded")
+    @Path("/editCustomer")
+    
+    public void editCustomer(@FormParam("name") String customerName, @FormParam("address1") String address_1,
+            @FormParam("address2") String address_2, @FormParam("city") String city, @FormParam("state") String state,
+            @FormParam("zip") String zip_code, @FormParam("discountCode") String discountCode, 
+            @FormParam("discountRate") BigDecimal rate, @FormParam("customerId") int customerId) {
+        
+       
+        System.out.println("Corvo: editCustomer Called with name = " + customerName + " Address1: " + address_1); 
+        CustomerData customer = new CustomerData();
+        customer.setName(customerName);
+        customer.setAddressline1(address_1);
+        customer.setAddressline2(address_2);
+        customer.setCity(city);
+        customer.setState(state);
+        customer.setCustomerId(customerId);
+        
+        DiscountCode discount = new DiscountCode();
+        //Character discountCodeCharacter = discountCode.charAt(0);
+        
+        discount.setDiscountCode('Q');
+        //discount.setRate(rate);
+        
+        customer.setDiscountCode(discount);
+        
+        MicroMarket zip = new MicroMarket();
+        zip.setZipCode(zip_code);
+        
+        customer.setZip(zip);  //Populate MicroMarket Object of customer
+
+        CustomerDataJpaController customerJpaController = new CustomerDataJpaController(utx, emf); //create an instance of your jpa controller and pass in the injected emf and utx 
+        try { 
+             customerJpaController.edit(customer);
+      } catch (Exception ex) { 
+          System.out.println("Exception Using JPA Controller: " + ex.getMessage() );
+            
+        } 
+        
+      
+    } 
+    
+    
+    
+    
+    
+    
 }

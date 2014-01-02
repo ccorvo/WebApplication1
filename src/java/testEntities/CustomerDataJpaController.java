@@ -107,13 +107,21 @@ public class CustomerDataJpaController implements Serializable {
     public void edit(CustomerData customerData) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            utx.begin();
+            // CORVO utx.begin();
             em = getEntityManager();
+            
+            System.out.println("CORVO: Before call to find customer: " + customerData.getCustomerId());
+            
             CustomerData persistentCustomerData = em.find(CustomerData.class, customerData.getCustomerId());
+            
+            System.out.println("CORVO: After call to em.find customer provided a customer id");
             MicroMarket zipOld = persistentCustomerData.getZip();
             MicroMarket zipNew = customerData.getZip();
             DiscountCode discountCodeOld = persistentCustomerData.getDiscountCode();
             DiscountCode discountCodeNew = customerData.getDiscountCode();
+            
+            System.out.println ("CORVO: After fetching zip and discount code");
+            
             Collection<PurchaseOrder> purchaseOrderCollectionOld = persistentCustomerData.getPurchaseOrderCollection();
             Collection<PurchaseOrder> purchaseOrderCollectionNew = customerData.getPurchaseOrderCollection();
             List<String> illegalOrphanMessages = null;
@@ -125,7 +133,9 @@ public class CustomerDataJpaController implements Serializable {
                     illegalOrphanMessages.add("You must retain PurchaseOrder " + purchaseOrderCollectionOldPurchaseOrder + " since its customerId field is not nullable.");
                 }
             }
-            if (illegalOrphanMessages != null) {
+            
+            System.out.println("CORVO: Before check for illegal orhpan");
+           if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             if (zipNew != null) {
@@ -171,10 +181,12 @@ public class CustomerDataJpaController implements Serializable {
                     }
                 }
             }
-            utx.commit();
+            // CORVO utx.commit();
         } catch (Exception ex) {
+            
+            System.out.println("CORVO: Exception in Jpa Controller: " + ex.getMessage());
             try {
-                utx.rollback();
+               // CORVO utx.rollback();
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
