@@ -221,7 +221,7 @@ public class CustomerResource {
         customer.setAddressline2(address_2);
         customer.setCity(city);
         customer.setState(state);
-        customer.setCustomerId(146557);
+        customer.setCustomerId(146546644);
         
         DiscountCode discount = new DiscountCode();
         Character discountCodeCharacter = discountCode.charAt(0);
