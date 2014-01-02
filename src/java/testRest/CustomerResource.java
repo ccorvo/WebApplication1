@@ -9,8 +9,6 @@ import com.corvo.customerRestSupport.Customer;
 import java.math.BigDecimal;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
 
 import javax.ws.rs.core.Context;
@@ -20,7 +18,6 @@ import sessonBeanForEntities.CustomerDataFacade;
 import testEntities.CustomerData;
 import testEntities.DiscountCode;
 import testEntities.MicroMarket;
-import testEntities.exceptions.NonexistentEntityException;
 
 /**
  * REST Web Service
@@ -69,11 +66,13 @@ public class CustomerResource {
      * @return an HTTP response with content of the updated or created resource.
      */
     @POST
+    @Path("/createCustomer")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    
     public void createCustomer(@FormParam("name") String customerName, @FormParam("address1") String address_1, 
     @FormParam("address2") String address_2, @FormParam("city") String city, @FormParam("state") String state, 
-    @FormParam("zip") String zip_code, @FormParam("discountCode") Character discountCode,
-    @FormParam("discountRate") BigDecimal rate) {
+    @FormParam("zip") String zip_code, @FormParam("discountCode") String discountCode,
+    @FormParam("discountRate") BigDecimal rate, @FormParam("customerId") Integer customerId ) {
         
        System.out.println("Corvo: createCustomer Called with name = " + customerName + " Address1: " + address_1); 
         CustomerData customer = new CustomerData();
@@ -82,9 +81,10 @@ public class CustomerResource {
         customer.setAddressline2(address_2);
         customer.setCity(city);
         customer.setState(state);
+        customer.setCustomerId(customerId);
         
         DiscountCode discount = new DiscountCode();
-        discount.setDiscountCode(discountCode);
+        discount.setDiscountCode('M');
         discount.setRate(rate);
         customer.setDiscountCode(discount);   //Populate Discount Code of customer
         
