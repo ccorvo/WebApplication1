@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceUnit;
 import javax.transaction.UserTransaction;
@@ -29,6 +31,10 @@ import testEntities.MicroMarket;
  * @author ccorvo
  */
 @Stateless
+
+//CORVO:: Found that the only way JPA Controllers would not throw roll-back exceptions was to
+//use the following annotation and designate BEAN vice container managed transactions.
+@TransactionManagement(TransactionManagementType.BEAN)
 @Path("/Customer")
 public class CustomerResource {
 
@@ -39,7 +45,7 @@ public class CustomerResource {
     //an Entity Manager Factory object and a User Tranaction object. These can be created via dependency injection as done
     //below 
     
-  @PersistenceUnit(unitName="WebApplication1PU") //inject from your application server 
+    @PersistenceUnit(unitName="WebApplication1PU") //inject from your application server 
     EntityManagerFactory emf; 
   
     @Resource //inject from your application server 
@@ -211,7 +217,7 @@ public class CustomerResource {
     public void createCustomer(@FormParam("name") String customerName, @FormParam("address1") String address_1,
             @FormParam("address2") String address_2, @FormParam("city") String city, @FormParam("state") String state,
             @FormParam("zip") String zip_code, @FormParam("discountCode") String discountCode, 
-            @FormParam("discountRate") BigDecimal rate) {
+            @FormParam("discountRate") BigDecimal rate, @FormParam("customerId") Integer customerId) {
         
        
         System.out.println("Corvo: createCustomer Called with name = " + customerName + " Address1: " + address_1); 
@@ -221,7 +227,7 @@ public class CustomerResource {
         customer.setAddressline2(address_2);
         customer.setCity(city);
         customer.setState(state);
-        customer.setCustomerId(146546644);
+        customer.setCustomerId(customerId);
         
         DiscountCode discount = new DiscountCode();
         Character discountCodeCharacter = discountCode.charAt(0);
