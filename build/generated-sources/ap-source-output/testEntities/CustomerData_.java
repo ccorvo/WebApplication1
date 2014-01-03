@@ -8,7 +8,7 @@ import testEntities.DiscountCode;
 import testEntities.MicroMarket;
 import testEntities.PurchaseOrder;
 
-@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2013-12-31T08:15:38")
+@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2014-01-03T12:05:59")
 @StaticMetamodel(CustomerData.class)
 public class CustomerData_ { 
 

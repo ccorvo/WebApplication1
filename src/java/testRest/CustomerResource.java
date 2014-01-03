@@ -112,34 +112,57 @@ public class CustomerResource {
         
     }
     
-  // If the GET request requires an application XML response, the following method will be called.
-    @GET
-    @Produces (MediaType.APPLICATION_XML)
-    @Path("/Info/{inputString}")
-    public Customer getCustomer( @PathParam("inputString") int customerId)
-    {
-            
-      
-            Customer customerObject = new Customer();
-            customerObject.setCustomerName("Christopher Corvo");
-            customerObject.setCustomerId(customerId);
-            
-            Address myaddress = new Address();
-            myaddress.setCity("Lumberton");
-            myaddress.setLine1("5 Stonehenge Drive");
-            myaddress.setState("New Jersey");
-            myaddress.setZipcode("08048"); 
-            customerObject.setAddress(myaddress);
-            
-                 
-        return customerObject;
+    @PUT
+    @Path("/editCustomer")
+    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    
+    public void editCustomer(@FormParam("name") String customerName, @FormParam("address1") String address_1, 
+    @FormParam("address2") String address_2, @FormParam("city") String city, @FormParam("state") String state, 
+    @FormParam("zip") String zip_code, @FormParam("discountCode") String discountCode,
+    @FormParam("discountRate") BigDecimal rate, @FormParam("customerId") Integer customerId ) {
         
-    }  
+       System.out.println("Corvo: edit Customer Called with name = " + customerName + " Address1: " + address_1); 
+        CustomerData customer = new CustomerData();
+        customer.setName(customerName);
+        customer.setAddressline1(address_1);
+        customer.setAddressline2(address_2);
+        customer.setCity(city);
+        customer.setState(state);
+        customer.setCustomerId(customerId);
+        
+        DiscountCode discount = new DiscountCode();
+        discount.setDiscountCode('M');
+        discount.setRate(rate);
+        customer.setDiscountCode(discount);   //Populate Discount Code of customer
+        
+        MicroMarket zip = new MicroMarket();
+        zip.setZipCode(zip_code);
+        
+        customer.setZip(zip);  //Populate MicroMarket Object of customer
+        
+       
+        if (customerFacade == null)
+            System.out.println("customerFacade is null");
+        try
+        {
+        customerFacade.edit(customer);  
+        
+        }
+        catch( Exception ex)
+        {
+            System.out.println("Corvo: editCustomer: Cauught Exception: " + ex.getMessage());
+            
+           
+        }
+        
+        
+        
+    }
     
  // If the GET request requires an application XML response, the following method will be called.
     @GET
     @Produces (MediaType.APPLICATION_XML)
-    @Path("/CustomerData/{inputString}")
+    @Path("/getCustomer/{inputString}")
     public CustomerData getCustomerData( @PathParam("inputString") int customerDataId)
     {
        
@@ -170,6 +193,10 @@ public class CustomerResource {
         
 
     }    
+    
+  
+    
+    
     
     
     //If the GET Request requires an application-JSON response, the following method will be called.
