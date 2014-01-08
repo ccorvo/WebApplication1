@@ -4,11 +4,14 @@
  */
 package testRest;
 
+import alertNotification.AlertNotification;
 import com.corvo.customerRestSupport.Address;
 import com.corvo.customerRestSupport.Customer;
 import java.math.BigDecimal;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -51,7 +54,11 @@ public class CustomerResource {
     @Resource //inject from your application server 
     UserTransaction utx;
     
-  
+    @EJB     //Inject AlertNotification Stateless Bean Class For use by Rest Service
+    AlertNotification alertNotification;
+    
+ 
+    
     
     /**
      * Creates a new instance of CustomerResource
@@ -64,6 +71,18 @@ public class CustomerResource {
         
     }
 
+    
+    
+    @PostConstruct
+    public void servicePostConstruct(){
+        
+        System.out.println("CORVO: Post Construct Callback Called");
+        
+    }
+    
+    
+    
+    
     /**
      * Retrieves representation of an instance of testRest.CustomerResource
      * @return an instance of java.lang.String
@@ -190,23 +209,21 @@ public class CustomerResource {
     public CustomerData getCustomerJson1( @PathParam("inputString") int customerDataId)
     {
        
-          
+         CustomerData customerData = null;
+       
+        CustomerDataJpaController customerJpaController = new CustomerDataJpaController(utx, emf); //create an instance of your jpa controller and pass in the injected emf and utx 
+        try { 
+             customerData = customerJpaController.findCustomerData(customerDataId);
+             System.out.println("Corvo: Before return from getCustomerData");
+                     
+        } catch (Exception ex) { 
+            System.out.println("Exception Using JPA Controller: " + ex.getMessage() );
+            
+        } 
+        
+        return customerData; 
      
-        CustomerData customerData = null;
-        /*        
-       // customerFacade = new CustomerDataFacade();
-        if (customerFacade == null)
-            System.out.println("customerFacade is null");
         
-        customerData = customerFacade.find(customerDataId);       
-        
-        System.out.println("Cutomer name for id: "+ customerDataId + " is: " + customerData.getName());
-        return customerData;   
-        
-     */   
-        
-        
-        return customerData;
     }    
     
   
@@ -245,6 +262,11 @@ public class CustomerResource {
         CustomerDataJpaController customerJpaController = new CustomerDataJpaController(utx, emf); //create an instance of your jpa controller and pass in the injected emf and utx 
         try { 
              customerJpaController.create(customer);
+             
+             String notification =("Created New Customer ID :" + customerId) ;
+             alertNotification.sendJMSMessageToNotificationServiceTopic(notification);
+             
+             
       } catch (Exception ex) { 
           System.out.println("Exception Using JPA Controller: " + ex.getMessage() );
             
@@ -254,7 +276,7 @@ public class CustomerResource {
     }
   
     
-   @POST
+   @PUT
     @Consumes("application/x-www-form-urlencoded")
     @Path("/editCustomer")
     
@@ -298,7 +320,30 @@ public class CustomerResource {
     } 
     
     
+    @PUT
+    @Consumes("application/x-www-form-urlencoded")
+    @Path("/destroyCustomer")
     
+    public void destroyCustomer(@FormParam("customerId") int customerId) {
+        
+       
+        System.out.println("Corvo: destroyCustomer Called with id= " + customerId); 
+        
+
+        CustomerDataJpaController customerJpaController = new CustomerDataJpaController(utx, emf); //create an instance of your jpa controller and pass in the injected emf and utx 
+        try { 
+             customerJpaController.destroy(customerId);
+             
+             String notification =("Destroy Customer ID :" + customerId) ;
+             alertNotification.sendJMSMessageToNotificationServiceTopic(notification);
+             
+      } catch (Exception ex) { 
+          System.out.println("Exception in destoryCustomer Using JPA Controller: " + ex.getMessage() );
+            
+        } 
+        
+      
+    } 
     
     
     

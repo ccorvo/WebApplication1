@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.EditCustomerDataTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_customerId}" for="customerId" />
+                    <h:inputText id="customerId" value="#{customerDataController.selected.customerId}" title="#{bundle.EditCustomerDataTitle_customerId}" required="true" requiredMessage="#{bundle.EditCustomerDataRequiredMessage_customerId}"/>
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_name}" for="name" />
+                    <h:inputText id="name" value="#{customerDataController.selected.name}" title="#{bundle.EditCustomerDataTitle_name}" />
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_addressline1}" for="addressline1" />
+                    <h:inputText id="addressline1" value="#{customerDataController.selected.addressline1}" title="#{bundle.EditCustomerDataTitle_addressline1}" />
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_addressline2}" for="addressline2" />
+                    <h:inputText id="addressline2" value="#{customerDataController.selected.addressline2}" title="#{bundle.EditCustomerDataTitle_addressline2}" />
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_city}" for="city" />
+                    <h:inputText id="city" value="#{customerDataController.selected.city}" title="#{bundle.EditCustomerDataTitle_city}" />
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_state}" for="state" />
+                    <h:inputText id="state" value="#{customerDataController.selected.state}" title="#{bundle.EditCustomerDataTitle_state}" />
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_phone}" for="phone" />
+                    <h:inputText id="phone" value="#{customerDataController.selected.phone}" title="#{bundle.EditCustomerDataTitle_phone}" />
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_fax}" for="fax" />
+                    <h:inputText id="fax" value="#{customerDataController.selected.fax}" title="#{bundle.EditCustomerDataTitle_fax}" />
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_email}" for="email" />
+                    <h:inputText id="email" value="#{customerDataController.selected.email}" title="#{bundle.EditCustomerDataTitle_email}" />
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_creditLimit}" for="creditLimit" />
+                    <h:inputText id="creditLimit" value="#{customerDataController.selected.creditLimit}" title="#{bundle.EditCustomerDataTitle_creditLimit}" />
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_zip}" for="zip" />
+                    <h:selectOneMenu id="zip" value="#{customerDataController.selected.zip}" title="#{bundle.EditCustomerDataTitle_zip}" required="true" requiredMessage="#{bundle.EditCustomerDataRequiredMessage_zip}">
+                        <f:selectItems value="#{microMarketController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                    <h:outputLabel value="#{bundle.EditCustomerDataLabel_discountCode}" for="discountCode" />
+                    <h:selectOneMenu id="discountCode" value="#{customerDataController.selected.discountCode}" title="#{bundle.EditCustomerDataTitle_discountCode}" required="true" requiredMessage="#{bundle.EditCustomerDataRequiredMessage_discountCode}">
+                        <f:selectItems value="#{discountCodeController.itemsAvailableSelectOne}"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+                <h:commandLink action="#{customerDataController.update}" value="#{bundle.EditCustomerDataSaveLink}"/>
+                <br />
+                <br />
+                <h:commandLink action="View" value="#{bundle.EditCustomerDataViewLink}" immediate="true"/>
+                <br />
+                <h:commandLink action="#{customerDataController.prepareList}" value="#{bundle.EditCustomerDataShowAllLink}" immediate="true"/>
+                <br />
+                <br />
+                <h:commandLink value="#{bundle.EditCustomerDataIndexLink}" action="/index" immediate="true" />
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

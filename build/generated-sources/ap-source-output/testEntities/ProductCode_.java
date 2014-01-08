@@ -6,7 +6,7 @@ import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import testEntities.Product;
 
-@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2014-01-02T15:13:18")
+@Generated(value="EclipseLink-2.3.0.v20110604-r9504", date="2014-01-07T15:53:19")
 @StaticMetamodel(ProductCode.class)
 public class ProductCode_ { 
 

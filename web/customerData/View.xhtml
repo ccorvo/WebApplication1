@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+
+    <ui:composition template="/template.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{bundle.ViewCustomerDataTitle}"></h:outputText>
+        </ui:define>
+        <ui:define name="body">
+            <h:panelGroup id="messagePanel" layout="block">
+                <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+            </h:panelGroup>
+            <h:form>
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_customerId}"/>
+                    <h:outputText value="#{customerDataController.selected.customerId}" title="#{bundle.ViewCustomerDataTitle_customerId}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_name}"/>
+                    <h:outputText value="#{customerDataController.selected.name}" title="#{bundle.ViewCustomerDataTitle_name}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_addressline1}"/>
+                    <h:outputText value="#{customerDataController.selected.addressline1}" title="#{bundle.ViewCustomerDataTitle_addressline1}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_addressline2}"/>
+                    <h:outputText value="#{customerDataController.selected.addressline2}" title="#{bundle.ViewCustomerDataTitle_addressline2}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_city}"/>
+                    <h:outputText value="#{customerDataController.selected.city}" title="#{bundle.ViewCustomerDataTitle_city}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_state}"/>
+                    <h:outputText value="#{customerDataController.selected.state}" title="#{bundle.ViewCustomerDataTitle_state}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_phone}"/>
+                    <h:outputText value="#{customerDataController.selected.phone}" title="#{bundle.ViewCustomerDataTitle_phone}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_fax}"/>
+                    <h:outputText value="#{customerDataController.selected.fax}" title="#{bundle.ViewCustomerDataTitle_fax}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_email}"/>
+                    <h:outputText value="#{customerDataController.selected.email}" title="#{bundle.ViewCustomerDataTitle_email}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_creditLimit}"/>
+                    <h:outputText value="#{customerDataController.selected.creditLimit}" title="#{bundle.ViewCustomerDataTitle_creditLimit}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_zip}"/>
+                    <h:outputText value="#{customerDataController.selected.zip}" title="#{bundle.ViewCustomerDataTitle_zip}"/>
+                    <h:outputText value="#{bundle.ViewCustomerDataLabel_discountCode}"/>
+                    <h:outputText value="#{customerDataController.selected.discountCode}" title="#{bundle.ViewCustomerDataTitle_discountCode}"/>
+                </h:panelGrid>
+                <br />
+                <h:commandLink action="#{customerDataController.destroyAndView}" value="#{bundle.ViewCustomerDataDestroyLink}"/>
+                <br />
+                <br />
+                <h:commandLink action="Edit" value="#{bundle.ViewCustomerDataEditLink}"/>
+                <br />
+                <h:commandLink action="#{customerDataController.prepareCreate}" value="#{bundle.ViewCustomerDataCreateLink}" />
+                <br />
+                <h:commandLink action="#{customerDataController.prepareList}" value="#{bundle.ViewCustomerDataShowAllLink}"/>
+                <br />
+                <br />
+                <h:commandLink value="#{bundle.ViewCustomerDataIndexLink}" action="/index" immediate="true" />
+
+            </h:form>
+        </ui:define>
+    </ui:composition>
+
+</html>

@@ -71,6 +71,7 @@ public class CustomerDataJpaController implements Serializable {
             if (zip != null) {
                 zip.getCustomerDataCollection().add(customerData);
                 zip = em.merge(zip);
+                System.out.println("Corvo: value of zip is: " + zip);
             }
             System.out.println("Corvo: AFter persist customerData");
             if (discountCode != null) {
